@@ -1,0 +1,78 @@
+import numpy as np
+import pandas as pd
+salesf = pd.read_csv("Data.csv", usecols = [1,2,3,4] )
+df = salesf.copy()
+df.columns
+df
+
+df.info()
+
+df.describe().T
+
+df.isnull().values.any()
+
+df.corr() #korelasyonlara bak
+
+import seaborn as sns
+sns.pairplot(df, kind  ="reg");
+
+sns.jointplot(x = "market", y = "sales", data = df, kind = "reg")
+
+import statsmodels.api as sm
+
+X = df[["market"]]
+X[0:5]
+
+X = sm.add_constant(X)
+
+X[0:5]
+
+y = df["sales"]
+
+y[0:5]
+
+lm = sm.OLS(y,X)
+
+model = lm.fit()
+
+model.summary()
+#rkare açıklanabilirlik oranıdır
+#düzeltilmiş rkare parametre ve değişkenler arttığında duyarlılığı törpüle bilgisidir
+#fstatistic modelin anlamlılık oranını verir
+#prob p value değeridir
+#coef nedir, markett
+#1 birim artis oldugunda bunun satisa etkisi nedir bilgisidir
+
+import statsmodels.formula.api as smf
+lm = smf.ols("sales ~ market", df)
+model = lm.fit()
+model.summary()
+
+model.params
+
+model.summary().tables[1] #katsayilar
+
+
+model.conf_int() #guven araliklari
+
+model.f_pvalue #model anlamliligi
+
+print("f_pvalue: ", "%.4f" % model.f_pvalue) #virgulden sonra 4 basamak getir ve yazdir
+
+model.rsquared_adj #duzeltilmis rkare degeri
+
+model.fittedvalues[0:5] #tahmin edilen ilk 5 deger
+
+y[0:5] #gercek degerler
+
+print("Sales = " +  str("%.2f" % model.params[0]) + " + TV" + "*" + str("%.2f" % model.params[1]))
+
+g = sns.regplot(df["market"], df["sales"], ci=None, scatter_kws={'color':'r', 's':9})
+g.set_title("Model Denklemi: Sales = 7.06 + TV*0.05")
+g.set_ylabel("Satış Sayısı")
+g.set_xlabel("Market Harcamaları")
+import matplotlib.pyplot as plt
+plt.xlim(-10,310)
+plt.ylim(bottom=0);
+
+
