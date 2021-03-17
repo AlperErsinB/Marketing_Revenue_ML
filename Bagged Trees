@@ -1,0 +1,44 @@
+bag_model = BaggingRegressor(bootstrap_features = True)
+bag_model.fit(X_train, y_train)
+
+bag_model.n_estimators
+
+bag_model.estimators_
+
+bag_model.estimators_samples_
+
+bag_model.estimators_features_
+
+bag_model.estimators_[1]
+
+y_pred = bag_model.predict(X_test)
+
+np.sqrt(mean_squared_error(y_test, y_pred))
+
+iki_y_pred = bag_model.estimators_[1].fit(X_train, y_train).predict(X_test)
+
+np.sqrt(mean_squared_error(y_test, iki_y_pred))
+
+yedi_y_pred = bag_model.estimators_[4].fit(X_train, y_train).predict(X_test)
+
+np.sqrt(mean_squared_error(y_test, yedi_y_pred))
+
+bag_model = BaggingRegressor(bootstrap_features = True)
+bag_model.fit(X_train, y_train)
+
+bag_params = {"n_estimators": range(2,20)}
+
+bag_cv_model = GridSearchCV(bag_model, bag_params, cv = 10)
+
+bag_cv_model.fit(X_train, y_train)
+
+bag_cv_model.best_params_
+
+bag_tuned = BaggingRegressor( n_estimators = 14, random_state = 45)
+
+bag_tuned.fit(X_train, y_train)
+
+y_pred = bag_tuned.predict(X_test)
+
+np.sqrt(mean_squared_error(y_test, y_pred))
+
