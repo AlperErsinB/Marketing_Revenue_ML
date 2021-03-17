@@ -1,0 +1,30 @@
+!pip install catboost
+
+from catboost import CatBoostRegressor
+
+catb = CatBoostRegressor()
+catb_model = catb.fit(X_train, y_train)
+
+y_pred = catb_model.predict(X_test)
+np.sqrt(mean_squared_error(y_test, y_pred))
+
+catb_grid = {
+    'iterations': [200,500,1000,2000],
+    'learning_rate': [0.01, 0.03, 0.05, 0.1],
+    'depth': [3,4,5,6,7,8] }
+    
+catb = CatBoostRegressor()
+catb_cv_model = GridSearchCV(catb, catb_grid, cv=5, n_jobs = -1, verbose = 2)
+
+catb_cv_model.fit(X_train, y_train)
+
+catb_cv_model.best_params_
+
+catb_tuned = CatBoostRegressor(iterations = 200, 
+                               learning_rate = 0.01, 
+                               depth = 8)
+
+catb_tuned = catb_tuned.fit(X_train,y_train)
+
+y_pred = catb_tuned.predict(X_test)
+np.sqrt(mean_squared_error(y_test, y_pred))
